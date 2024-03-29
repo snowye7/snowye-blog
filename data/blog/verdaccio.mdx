@@ -1,0 +1,43 @@
+---
+title: '如何部署npm私服'
+date: 2024-3-29 09:18:00
+lastmod: '2024-3-29'
+tags: ['Node']
+draft: false
+summary: 'verdaccio'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 使用 Verdaccio 部署 npm 私服
+
+[Verdaccio 官方网站](https://verdaccio.org/)
+
+### 1、全局安装
+
+```
+npm install -g verdaccio
+```
+
+### 2、启动
+
+命令行输入 verdaccio 代表服务启动，包含配置文件地址，可视化地址等信息
+
+```
+ info --- config file  - C:\Users\Lenovo\AppData\Roaming\verdaccio\config.yaml
+ info --- the "crypt" algorithm is deprecated consider switch to "bcrypt" in the configuration file. Read the documentation for additional details
+ info --- using htpasswd file: C:\Users\Lenovo\AppData\Roaming\verdaccio\htpasswd
+ info --- plugin successfully loaded: verdaccio-htpasswd
+ info --- plugin successfully loaded: verdaccio-audit
+ warn --- http address - http://localhost:4873/ - verdaccio/5.30.2
+```
+
+此时只能通过 localhost 访问,想要让别人能够下载你的包,需要进入配置文件 在最后一行加上
+
+```
+listen: 0.0.0.0:4873
+```
+
+此时就可以通过 ip 安装依赖
+
+**_安装依赖建议不改变全局的镜像地址，在下载的时候加上 --registry http://localhost:4873 的后缀即可 _**
