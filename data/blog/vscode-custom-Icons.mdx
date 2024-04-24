@@ -1,0 +1,49 @@
+---
+title: 'vsicons自定义图标'
+date: 2024-4-24 18:15:00
+lastmod: '2024-04-24'
+tags: ['vscode']
+draft: false
+summary: 'vscode图标插件vsicons自定义文件图标'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 2023 vsicons 自定义图标
+
+> 最近刚好看了看 vscode 主题，突然就好奇起来这些文件的图标是怎么做的，又刚好在做自己的命令行工具想着能不能给自己的命令行工具弄一个配置文件，有自己独特的图标，那真的是泰酷辣！
+
+### 存放图标文件
+
+- Windows: C:\Users\<your_user>\AppData\Roaming\<Code Folder>\User\vsicons-custom-icons
+- Linux: /home/<your_user>/.config/<Code Folder>/User/vsicons-custom-icons Linux： /home/<your_user>/.config/<Code Folder>/User/vsicons-custom-icons
+- Mac: /Users/<your_user>/Library/Application Support/<Code Folder>/User/vsicons-custom-icons
+
+<Code Folder> 指 VSCode 的文件夹名称，具体取决于版本：一般为 Code
+
+### 文件名
+
+如果是文件类型，那么在 vsicons-custom-icons 文件夹中需要加一个文件 file*type*<your-svg-name>.svg
+文件夹图标 folder*type*<your-svg-name>.svg default\_<your-svg-name>.svg
+
+### vscode 配置
+
+文件准备好之后，打开 vscode 的 setting.json 文件夹
+
+```json
+{
+  "vsicons.associations.files": [
+    {
+      "icon": "snowye",
+      "extensions": ["snowye.config.js"],
+      "format": "svg",
+      "filename": true
+    }
+  ]
+}
+```
+
+以我的第一个图标文件举例, vsicons-custom-icons 文件夹下有一个 file_type_snowye.svg 文件，icon 就是图标文件名，extensions 就是需要图标的文件名，format 图标类型 推荐 svg（官方默认），filename：true
+即可让 snowye.config.js 为 snowye 图标
+
+泰酷辣！！！！！！
