@@ -15,20 +15,20 @@ bibliography: references-data.bib
 
 ### 存放图标文件
 
-- Windows: C:\Users\<your_user>\AppData\Roaming\<Code Folder>\User\vsicons-custom-icons
-- Linux: /home/<your_user>/.config/<Code Folder>/User/vsicons-custom-icons Linux： /home/<your_user>/.config/<Code Folder>/User/vsicons-custom-icons
-- Mac: /Users/<your_user>/Library/Application Support/<Code Folder>/User/vsicons-custom-icons
+- C:\Users\<your_user>\AppData\Roaming\<Code Folder>\User\vsicons-custom-icons
 
-<Code Folder> 指 VSCode 的文件夹名称，具体取决于版本：一般为 Code
+**_默认是没有的需要创建 名称必须为vsicons-custom-icons_**
+
+**_Code Folder 指 VSCode 的文件夹名称，具体取决于版本：一般为 Code_**
 
 ### 文件名
 
-如果是文件类型，那么在 vsicons-custom-icons 文件夹中需要加一个文件 file*type*<your-svg-name>.svg
-文件夹图标 folder*type*<your-svg-name>.svg default\_<your-svg-name>.svg
+- 如果是文件类型，那么在 vsicons-custom-icons 文件夹中需要加一个文件 `file_type_<your-svg-name>.svg`
+- 文件夹图标 `folder_type_<your-svg-name>.svg default\_<your-svg-name>.svg`
 
 ### vscode 配置
 
-文件准备好之后，打开 vscode 的 setting.json 文件夹
+- 文件准备好之后，打开 vscode 的 setting.json 文件夹
 
 ```json
 {
@@ -43,12 +43,10 @@ bibliography: references-data.bib
 }
 ```
 
-以我的第一个图标文件举例, vsicons-custom-icons 文件夹下有一个 file_type_snowye.svg 文件，icon 就是图标文件名，extensions 就是需要图标的文件名，format 图标类型 推荐 svg（官方默认），filename：true
-即可让 snowye.config.js 为 snowye 图标
-
-泰酷辣！！！！！！
+- 以我的第一个图标文件举例, vsicons-custom-icons 文件夹下有一个 file_type_snowye.svg 文件，icon 就是图标文件名，extensions 就是需要图标的文件名，format 图标类型 推荐 svg（官方默认），filename：true即可让 snowye.config.js 为 snowye 图标
 
 ### 参考连接
 
-[vsicons github 参考](https://github.com/vscode-icons/vscode-icons/wiki/Custom)
-[社区回答](https://medium.com/@chih.hsi.chen/how-to-add-your-custom-icons-to-vscode-icons-9ab8c3f9abc1)
+1、[vsicons github 参考](https://github.com/vscode-icons/vscode-icons/wiki/Custom)
+
+2、[社区回答](https://medium.com/@chih.hsi.chen/how-to-add-your-custom-icons-to-vscode-icons-9ab8c3f9abc1)
