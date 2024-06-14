@@ -1,0 +1,65 @@
+---
+title: '自己的命令行工具snowye-prettier'
+date: 2024-6-11 18:45:00
+lastmod: '2024-6-11'
+tags: ['vscode']
+draft: false
+summary: '命令行工具格式化所有文件工具'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# snowye-prettier
+
+> 相信每个公司或者每个团队都有自己的代码格式规范，但是当你初始化一个项目的时候（vite、create react app、rsbuild）的初始代码并不是你的代码格式，这时候你需要去prettier匹配tsx，ts等文件去格式，所以snowye-prettier就出现了
+
+## 注意点
+
+prettier工具格式化是有优先级的
+- t0 package.json里的prettier配置
+- t1 .prettierrc文件
+- 剩下就是 prettier.config.(js|ts|json)等等
+所以我在格式化的时候也需要去注意这些 prettier官方也是有相关的api的
+
+##代码
+```typescript
+export const handlePrettier = async () => {
+    const filterFile = await input({ message: "选择过滤的文件夹 空格隔开" })
+    const srcDirectory = path.join(process.cwd())
+    const prettierFiles = getAllFilesInDirectory(srcDirectory, filterFile.split(" "))
+    const prettierConfigFile = await prettier.resolveConfigFile()
+    let Config: Options = {
+        semi: false,
+        tabWidth: 4,
+        arrowParens: "avoid",
+        printWidth: 800,
+        trailingComma: "none"
+    }
+    if (prettierConfigFile) {
+        Config = (await prettier.resolveConfig(prettierConfigFile)) as Options
+    }
+    createProgress({
+        name: process.cwd().split("\\").pop() ?? "snowye-prettier",
+        total: prettierFiles.length,
+        onProgress: async index => {
+            const file = prettierFiles[index]
+            const source = readFileSync(file, "utf-8")
+            const formatted = await prettier.format(source, {
+                ...Config,
+                filepath: file
+            })
+            writeFileSync(file, formatted)
+        },
+        onError: index => {
+            console.log(" ❌ " + chalk.redBright(`Error: ${prettierFiles[index]} 文件格式化失败`))
+        }
+    })
+}
+```
+- 首先获取目录中的所有js ts jsx tsx json html css等文件
+- 再获取prettier的配置文件
+- 再使用写的一个封装好的createProgress的高阶函数来格式化每一个匹配的文件
+
+##
+![效果图](/static/images/snowye-prettier.png)
+

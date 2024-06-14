@@ -1,0 +1,30 @@
+---
+title: '自己的命令行工具snowye-export'
+date: 2024-6-12 14:45:00
+lastmod: '2024-6-12'
+tags: ['vscode']
+draft: false
+summary: '防止满屏import'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# snowye-export
+
+> 在之前做的一些项目中，由于项目过大，封装了很多很多组件，在一些 page 下，甚至一些大的组件下，文件的顶部都是 import something from "something",然后突然想到了一个问题，为什么 ant 的 input 等其他组件可以在 antd 中导入，也可以类似在 antd/input 中导入，加上另一个问题：React，antd 等库中为什么都有这样的代码：
+
+![效果图](/static/images/snowye-export-antd.png)
+
+所以我在新项目在给 components，utils，hooks，pages 等文件夹中都有类似的 index.ts 文件 确实大大减少了组件和页面文件顶部的 import 的行数
+
+## 效果图
+
+### 使用前
+
+![效果图](/static/images/snowye-export-1.png)
+
+### 使用后生成的文件夹
+
+> 如果原先就有了 index 文件夹 我会进行询问是否清空后添加
+> export * from "something" 需要都是具名导出
+![效果图](/static/images/snowye-export-2.png)
