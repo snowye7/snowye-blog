@@ -1,0 +1,42 @@
+---
+title: '你不知道的Typescript'
+date: 2024-6-28 09:18:00
+lastmod: '2024-6-28'
+tags: ['typescript']
+draft: false
+summary: 'Typescript有意思的魔法'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 你不知道的 Typescript
+
+## React 中 ComponentProps 与 HTMLAttributes
+
+> React 中获取 dom 元素的 props 类型有两种方法 $ComponentProps<"div">$ 和 $HTMLAttributes<HTMLDivElement>$，区别就在于前者包含了 React 的 key 和 ref 属性!
+
+```typescript
+import { ComponentProps, HTMLAttributes } from 'react'
+
+type DivComponentProps = ComponentProps<'div'>
+
+type DivHTMLAttributes = HTMLAttributes<HTMLDivElement>
+
+type Difference = Omit<DivComponentProps, keyof DivHTMLAttributes>
+
+const Difference: (keyof Difference)[] = ['key', 'ref']
+```
+
+## 联合类型中匹配到自己想要的
+
+> 匹配 React 中所有的事件
+
+> $Capitalize<string>$ 约束字符串的开头为大写
+
+```typescript
+import { ComponentProps } from 'react'
+
+type Events = keyof ComponentProps<'div'> & `on${Capitalize<string>}`
+
+const events: Events[] = ['onAbort', 'onCanPlay', 'onClick'] //匹配出所有的on开头的事件
+```

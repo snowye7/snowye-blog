@@ -6,5 +6,6 @@
   "browser": 1,
   "Node": 1,
   "vscode": 1,
-  "command": 3
+  "command": 3,
+  "typescript": 1
 }
