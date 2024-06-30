@@ -1,0 +1,75 @@
+---
+title: '树形结构转化成Fiber架构'
+date: 2024-7-1 01:18:00
+lastmod: '2024-7-1'
+tags: ['javsscript']
+draft: false
+summary: 'treeToFiber'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 树形结构转化成Fiber架构
+
+```typescript
+type Fiber<T> = T & {
+    parant: Fiber<T> | null
+    child: Fiber<T> | null
+    sibling: Fiber<T> | null
+}
+
+type CommonNode<T> = T & {
+    children?: CommonNode<T>[]
+}
+
+export const treeToFiber = <T>(node: CommonNode<T>[]): Fiber<T>[] => {
+    const fibers: Fiber<T>[] = []
+
+    const handle = (node: CommonNode<T>) => {
+        const { children, ...rest } = node
+
+        let fiber: Fiber<T> = {
+            ...(rest as T),
+            parant: null,
+            sibling: null,
+            child: null
+        }
+
+        function handleChildren(children: CommonNode<T>[], parant: Fiber<T> | null = null) {
+            let prev: Fiber<T> | null = null
+
+            children.forEach(child => {
+                const { children, ...rest } = child
+
+                const childFiber: Fiber<T> = {
+                    ...(rest as T),
+                    parant,
+                    sibling: null,
+                    child: null
+                }
+
+                if (parant && !parant.child) parant.child = childFiber
+
+                if (prev) {
+                    prev.sibling = childFiber
+                }
+
+                prev = childFiber
+
+                children && handleChildren(children, childFiber)
+            })
+        }
+
+        if (children) {
+            handleChildren(children, fiber)
+        }
+
+        return fiber
+    }
+
+    node.forEach(n => fibers.push(handle(n)))
+
+    return fibers
+}
+
+```
