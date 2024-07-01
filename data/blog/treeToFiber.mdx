@@ -12,17 +12,17 @@ bibliography: references-data.bib
 # 树形结构转化成Fiber架构
 
 ```typescript
-type Fiber<T> = T & {
-    parant: Fiber<T> | null
+type Fiber<T extends Record<string, unknown>> = T & {
+    parent: Fiber<T> | null
     child: Fiber<T> | null
     sibling: Fiber<T> | null
 }
 
-type CommonNode<T> = T & {
+type CommonNode<T extends Record<string, unknown>> = T & {
     children?: CommonNode<T>[]
 }
 
-export const treeToFiber = <T>(node: CommonNode<T>[]): Fiber<T>[] => {
+export const treeToFiber = <T extends Record<string, unknown>>(node: CommonNode<T>[]): Fiber<T>[] => {
     const fibers: Fiber<T>[] = []
 
     const handle = (node: CommonNode<T>) => {
@@ -30,12 +30,12 @@ export const treeToFiber = <T>(node: CommonNode<T>[]): Fiber<T>[] => {
 
         let fiber: Fiber<T> = {
             ...(rest as T),
-            parant: null,
+            parent: null,
             sibling: null,
             child: null
         }
 
-        function handleChildren(children: CommonNode<T>[], parant: Fiber<T> | null = null) {
+        function handleChildren(children: CommonNode<T>[], parent: Fiber<T> | null = null) {
             let prev: Fiber<T> | null = null
 
             children.forEach(child => {
@@ -43,12 +43,12 @@ export const treeToFiber = <T>(node: CommonNode<T>[]): Fiber<T>[] => {
 
                 const childFiber: Fiber<T> = {
                     ...(rest as T),
-                    parant,
+                    parent,
                     sibling: null,
                     child: null
                 }
 
-                if (parant && !parant.child) parant.child = childFiber
+                if (parent && !parent.child) parent.child = childFiber
 
                 if (prev) {
                     prev.sibling = childFiber
@@ -71,5 +71,4 @@ export const treeToFiber = <T>(node: CommonNode<T>[]): Fiber<T>[] => {
 
     return fibers
 }
-
 ```
