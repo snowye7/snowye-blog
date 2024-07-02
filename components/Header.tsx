@@ -1,12 +1,17 @@
+'use client'
+
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
-import SearchButton from './SearchButton'
 import Image from 'next/image'
+import { useTheme } from 'next-themes'
+import { clsx } from 'snowye-tools'
 
 const Header = () => {
+  const theme = useTheme()
+
   return (
     <header className="flex items-center justify-between py-4">
       <div>
@@ -30,12 +35,14 @@ const Header = () => {
             <Link
               key={link.title}
               href={link.href}
-              className="hidden font-medium text-gray-900 dark:text-gray-100 sm:block hover:bg-[rgba(35,39,47,0.1)] rounded-lg px-3 py-2"
+              className={clsx(
+                'hidden font-medium text-gray-900 dark:text-gray-100 sm:block rounded-lg px-3 py-2',
+                theme.theme === 'dark' ? ' hover:bg-[#ffffff60]' : ' hover:bg-[rgba(35,39,47,0.1)]'
+              )}
             >
               {link.title}
             </Link>
           ))}
-        {/* <SearchButton /> */}
         <ThemeSwitch />
         <MobileNav />
       </div>
