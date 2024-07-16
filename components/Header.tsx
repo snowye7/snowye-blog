@@ -36,8 +36,7 @@ const Header = () => {
               key={link.title}
               href={link.href}
               className={clsx(
-                'hidden font-medium text-gray-900 dark:text-gray-100 sm:block rounded-lg px-3 py-2',
-                theme.theme === 'dark' ? 'hover:bg-[#ffffff60]' : 'hover:bg-[#23272f1a]'
+                'hidden font-medium text-gray-900 dark:text-gray-100 sm:block rounded-lg px-3 py-2 hover:bg-[#23272f1a] dark:hover:bg-[#ffffff60]'
               )}
             >
               {link.title}
