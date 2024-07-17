@@ -1,5 +1,5 @@
 {
-  "javascript": 3,
+  "javascript": 4,
   "2023": 1,
   "prettier": 1,
   "tailwindcss": 1,
@@ -7,6 +7,6 @@
   "Node": 1,
   "vscode": 1,
   "command": 3,
-  "typescript": 2,
+  "typescript": 3,
   "React":1
 }
