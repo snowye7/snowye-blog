@@ -1,0 +1,38 @@
+---
+title: 'powerShell重命名'
+date: 2024-8-26 09:18:00
+lastmod: '2024-8-26'
+tags: ['terminal']
+draft: false
+summary: ''
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# powerShell重命名
+
+1. 进入配置文件：
+
+```javascript
+notepad $PROFILE
+//如果没有，需要自己创建
+New-Item -Path $PROFILE -Type File -Force
+```
+
+2. 如何修改：
+
+```javascript
+Set-Alias p pnpm //将pnpm改为p
+
+// 如果是多个单词组成的命令 需要创建一个函数
+function pi {
+    pnpm install $args
+}
+
+```
+
+3. 重新加载配置文件：
+
+```javascript
+. $PROFILE
+```
