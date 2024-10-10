@@ -1,0 +1,24 @@
+---
+title: '关于屏幕安全区域'
+date: 2024-10-10 09:18:00
+lastmod: '2024-10-10'
+tags: ['React']
+draft: false
+summary: '微信小程序屏幕安全区域高度问题'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 微信小程序屏幕安全区域高度问题
+
+> 代码环境: Taro 3.6.2
+
+这个问题通常出现在iphoneX等屏幕边角有弧度的设备，`screenHeight`是指整块屏幕的高度，在需要设置滚动区域高度的时候，通常需要计算得出。而`windowHeight`是指除了小程序标头的高度,通过`screenHeight`减去`bottom`的位置就可以得到安全区域的高度，再通过实际的高度计算出滚动区域的高度。
+
+```js
+const systemInfo = Taro.getSystemInfoSync()
+
+const safeBottom = systemInfo.safeArea ? systemInfo.screenHeight - systemInfo.safeArea.bottom : 0
+```
+
+![举例](/static/images/screenArea.png)
