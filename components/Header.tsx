@@ -1,9 +1,5 @@
-'use client'
-
 import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
-import siteMetadata from '@/data/siteMetadata'
-import Image from 'next/image'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
@@ -12,7 +8,6 @@ import { useTheme } from 'next-themes'
 import { clsx } from 'snowye-tools'
 
 const Header = () => {
-  const theme = useTheme()
 
   return (
     <header className="flex items-center justify-between py-4">
