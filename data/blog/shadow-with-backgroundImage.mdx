@@ -1,0 +1,39 @@
+---
+title: '关于背景图的自适应阴影'
+date: 2024-10.25 16:26:00
+lastmod: '2024-10-25'
+tags: ['css']
+draft: false
+summary: 'css实现自适应图片颜色的阴影 类似Vite官网的logo'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 关于背景图的自适应阴影
+
+#### 效果如下
+![效果图](/static/images/chromeLogo.png)
+
+#### 如何实现？
+
+首先我们需要一个带有背景图片的div
+```jsx
+<div style={{ backgroundImage: `url(${png})` }} className="after-shadow relative h-[300px] w-[300px] rounded-full bg-cover"></div>
+```
+
+其次给他添加一个伪元素
+```css
+
+.after-shadow::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: inherit;
+    filter: blur(20px);
+    z-index: -1;
+}
+
+```

@@ -1,6 +1,7 @@
 // @ts-check
 const { fontFamily } = require("tailwindcss/defaultTheme")
 const colors = require("tailwindcss/colors")
+const highlights = require("tailwindcss-highlights")
 
 /** @type {import("tailwindcss/types").Config } */
 module.exports = {
@@ -60,5 +61,5 @@ module.exports = {
             })
         }
     },
-    plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography")]
+    plugins: [require("@tailwindcss/forms"), require("@tailwindcss/typography"),highlights]
 }
