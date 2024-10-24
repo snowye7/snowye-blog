@@ -1,0 +1,43 @@
+---
+title: '选项框数据回显'
+date: 2024-7-18 09:18:00
+lastmod: '2024-7-18'
+tags: ['typescript', 'javascript']
+draft: false
+summary: '数据回显解决方案'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+> 最近在做crud的项目，搜索项的数据会保存在url中，当刷新页面，select的options又需要通过接口返回，这时候antd的select就会显示value，需要通过反写label,antd中添加labelInValue,这时候选中的value就变成了一个包含label和value属性的对象。
+
+```tsx
+import { useRequest } from "ahooks"
+import { Select } from "antd"
+import { DefaultOptionType } from "antd/es/select"
+import { useState } from "react"
+
+export default function App() {
+    const { data: options } = useRequest(async () => {
+        return (await new Promise(resolve => {
+            setTimeout(() => {
+                resolve([
+                    { label: "苹果", value: "apple" },
+                    { label: "香蕉", value: "banana" },
+                    { label: "橘子", value: "orange" },
+                    { label: "梨", value: "pear" }
+                ])
+            }, 2000)
+        })) as DefaultOptionType[]
+    })
+
+    const [value, setValue] = useState<DefaultOptionType>({ label: "苹果", value: "apple" })
+
+    return (
+        <div className="h-screen flex items-center justify-center">
+            <Select labelInValue={true} value={value} onChange={setValue} options={options} className="!w-[200px]"></Select>
+        </div>
+    )
+}
+
+```

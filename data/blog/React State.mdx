@@ -1,0 +1,83 @@
+---
+title: 'React最被低估的状态管理工具'
+date: 2024-7-16 09:18:00
+lastmod: '2024-7-16'
+tags: ['React']
+draft: false
+summary: 'useRequest版的全局状态管理'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 使用useRequest的cacheKey轻松实现轻量状态管理
+
+> 优点：轻量、简单
+
+> 缺点：初始化data总是undefined
+
+```tsx
+import { useRequest } from "ahooks"
+import { Button } from "antd"
+import { FC, useCallback } from "react"
+
+type A = { number: number }
+
+function createStore(): [A | undefined, typeof setState] {
+    const { data, run } = useRequest<A, [A]>(
+        (props: A) => {
+            if (props) {
+                return Promise.resolve(props)
+            }
+            return Promise.resolve({ number: 1 })
+        },
+        {
+            cacheKey: "number"
+        }
+    )
+
+    const setState = useCallback((newValue: A) => {
+        run(newValue)
+    }, [])
+
+    return [data, setState]
+}
+
+const Child: FC = () => {
+    const [state, setState] = createStore()
+
+    if (!state) return null
+
+    return (
+        <div className="flex gap-2 items-center">
+            <div>Child：</div>
+            <h1>{state.number}</h1>
+            <Button type="primary" onClick={() => setState({ number: state.number + 1 })}>
+                +1
+            </Button>
+        </div>
+    )
+}
+
+const App = () => {
+    const [state, setState] = createStore()
+
+    if (!state) return null
+
+    return (
+        <div className="h-screen flex flex-col items-center justify-center gap-4">
+            <Child />
+            <div className="flex items-center gap-2">
+                <div>App:</div>
+                <div>{state.number}</div>
+                <Button type="primary" onClick={() => setState({ number: state.number + 1 })}>
+                    +1
+                </Button>
+            </div>
+        </div>
+    )
+}
+
+export default App
+
+```
+[来源](https://www.bilibili.com/video/BV1KW421d7w1/?spm_id_from=333.999.0.0)

@@ -1,0 +1,47 @@
+---
+title: 'enum枚举'
+date: 2024-7-9 09:18:00
+lastmod: '2024-7-9'
+tags: ['typescript', 'javascript']
+draft: false
+summary: 'typescript中的enum枚举'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# enum枚举
+
+> 在开发中我们需要去创建一个映射的对象，去手动创建一个Object，他并没有一个良好的类型识别，enum可以帮我们解决这个问题
+
+### 注意点：TypeScript 为数字枚举创建了反向映射，允许我们通过值查找键名
+
+```typescript
+enum Fruit {
+    Apple = "苹果",
+    Banana = "香蕉",
+    Orange = "橘子",
+    Watermelon = 1
+}
+
+// 枚举类型的key:Apple Banana Orange Watermelon
+type FruitType = keyof typeof Fruit
+
+//配合Object.entries()方法即可拥有良好的类型识别
+
+const test = Object.entries(Fruit).map(([key, value]) => {
+    return {
+        key,
+        value
+    }
+})
+
+// test的结果 [
+//   [ '1', 'Watermelon' ],
+//   [ 'Apple', '苹果' ],
+//   [ 'Banana', '香蕉' ],
+//   [ 'Orange', '橘子' ],
+//   [ 'Watermelon', 1 ]
+// ]
+
+
+```
