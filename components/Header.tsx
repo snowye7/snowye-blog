@@ -1,14 +1,12 @@
-import siteMetadata from '@/data/siteMetadata'
 import headerNavLinks from '@/data/headerNavLinks'
+import siteMetadata from '@/data/siteMetadata'
+import Image from 'next/image'
+import { clsx } from 'snowye-tools'
 import Link from './Link'
 import MobileNav from './MobileNav'
 import ThemeSwitch from './ThemeSwitch'
-import Image from 'next/image'
-import { useTheme } from 'next-themes'
-import { clsx } from 'snowye-tools'
 
 const Header = () => {
-
   return (
     <header className="flex items-center justify-between py-4">
       <div>
