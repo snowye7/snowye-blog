@@ -1,0 +1,52 @@
+---
+title: 'package.json中scripts的本质'
+date: 2024-11.20 09:18:00
+lastmod: '2024-11-20'
+tags: ['command', 'Node']
+draft: false
+summary: ''
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# package.json中scripts的本质
+
+当我们用包管理器去执行`dev`，`build`等命令的时候，前提是package.json文件中的`scripts`需要有这个命令，那么这个命令到底做了什么事情呢？
+
+### 前往node_modules中对应的包中的bin文件（以rsbuild为例）
+
+```
+#!/usr/bin/env node
+import nodeModule from 'node:module';
+
+// enable on-disk code caching of all modules loaded by Node.js
+// requires Nodejs >= 22.8.0
+const { enableCompileCache } = nodeModule;
+if (enableCompileCache) {
+  try {
+    enableCompileCache();
+  } catch {
+    // ignore errors
+  }
+}
+
+async function main() {
+  const { __internalHelper, logger } = await import('../dist/index.js');
+  const { runCli, prepareCli } = __internalHelper;
+
+  prepareCli();
+
+  try {
+    runCli();
+  } catch (err) {
+    logger.error(err);
+  }
+}
+
+main();
+
+```
+
+### 执行runCli这个函数
+
+runCli中主要设置了`rsbuild`这个命令，创建了`dev`，`build`，`preview`，`inspect`等命令，绑定了通用的配置，对`dev`，`preview`配置了服务器，并各自对各个命令进行`action`操作执行打包、运行开发服务器等操作。
