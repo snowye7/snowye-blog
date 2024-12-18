@@ -1,0 +1,30 @@
+---
+title: 'javascript中的模块化'
+date: 2024-12-18 09:18:00
+lastmod: '2024-12-18'
+tags: ['javascript']
+draft: false
+summary: '模块化方案CommonJS和esm的区别'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# 模块化方案CommonJS和esm的区别
+
+- `cjs`是基于运行时的同步加载，本质上是包裹了一层字符串拼接的函数，将Module,export,require,__dirname,__filename传递给这个函数并同步运行。`esm`是基于编译时的异步加载。
+- `cjs`是可以修改值的,`esm`值不可修改，可导出一个函数修改。
+- `cjs`不支持tree shaking，`esm`支持tree shaking。
+- `cjs`中顶层的this指向模块,`esm`指向undefined，本质是默认开启严格模式。
+
+### cjs原理
+- cjs首先会在一个类似WeakMap（SafeWeakMap：方便底层c++调用）中查找模块的缓存,读到复用，读不到调用`fs`模块读取。
+- 判断是不是js文件，如果是的话读取`package.json`文件中的`type`是不是`module`,如果是`module`并且使用了`cjs`就会报错。
+- 拼接代码,创建函数作用域，防止变量污染。
+```javascript
+const content = "" //读取的模块内容
+
+`function(exports,require,module,__dirname,__filename) {
+    ${content}
+}`
+```
+- 运行并将`exports,require,module,__dirname,__filename`传入函数接收代码运行的结果。
