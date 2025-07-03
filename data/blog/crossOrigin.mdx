@@ -1,0 +1,76 @@
+---
+title: 'canvas被污染的问题'
+date: 2025-1-1 12:18:00
+lastmod: '2025-01-01'
+tags: ['javascript']
+draft: false
+summary: 'HTML crossOrigin 属性与 Canvas 图片污染详解'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# HTML crossOrigin 属性与 Canvas 图片污染详解
+
+## crossOrigin属性
+
+### crossOrigin 的取值
+
+- `anonymous`：发送跨域请求时不携带凭据（如 cookies）,但会进行cors校验
+- `use-credentials`：发送跨域请求时携带凭据
+- 不设置：默认行为，不发送 CORS 请求头
+
+## Canvas 图片污染问题
+
+### 什么是 Canvas 污染？
+
+当 Canvas 绘制了来自不同域的图片资源时，Canvas 会被标记为"受污染"（tainted）。一旦 Canvas 被污染，就无法：
+
+- 调用 `toDataURL()` 方法
+- 调用 `getImageData()` 方法
+- 将 Canvas 内容导出为图片
+
+### 污染的触发条件
+
+```javascript
+const canvas = document.createElement('canvas')
+const ctx = canvas.getContext('2d')
+const img = new Image()
+
+// 这会导致 Canvas 被污染
+img.src = 'https://...anyImage.jpg'
+img.onload = () => {
+  ctx.drawImage(img, 0, 0)
+
+  // 以下操作会抛出安全错误
+  canvas.toDataURL() // SecurityError!
+}
+```
+
+## 解决方案
+
+### 1. 设置 crossOrigin 属性
+
+```javascript
+const img = new Image()
+img.crossOrigin = 'anonymous' // 关键设置
+img.src = 'https://...anyImage.jpg'
+
+img.onload = () => {
+  ctx.drawImage(img, 0, 0)
+  canvas.toDataURL() // 现在可以正常工作
+}
+```
+
+### 2. 服务器配置 CORS 头
+
+服务器需要返回适当的 CORS 响应头：
+
+```
+Access-Control-Allow-Origin: *
+```
+
+或指定具体域名：
+
+```
+Access-Control-Allow-Origin: https://your-domain.com
+```
