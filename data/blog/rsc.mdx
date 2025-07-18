@@ -1,0 +1,31 @@
+---
+title: 'React Server Component'
+date: 2025-7-18 09:18:00
+lastmod: '2025-7-18'
+tags: ['React']
+draft: false
+summary: 'RSC RSC-Payload'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# React Server Component是如何工作的
+
+### MPA时代 （Multi-Page Application）
+
+客户端请求服务端，服务器返回HTML，客户端进行 `FormAction` 等操作，请求服务端修改数据库，返回整个页面的HTML，达到交互目的，即 `hard Navigation`
+
+![MPA](/static/images/MPA.png)
+
+### SPA时代 (Single-Page Application)
+
+客户端初次请求服务端获取基础HTML和JavaScript bundle，之后通过Fetch与服务端API交互，JavaScript动态更新DOM内容，实现页面局部刷新，即 `soft Navigation`
+
+### SSR时代 (Server-Side Render)
+
+服务端根据请求URL执行JavaScript代码，在服务器端渲染生成完整HTML页面返回给客户端，客户端接收后进行hydration激活交互功能。现代SSR还引入了 `RSC payload` ，将React Server Components序列化为紧凑的二进制数据传输，实现了服务端组件与客户端组件的混合渲染，结合了MPA的SEO优势和SPA的用户体验
+
+- `DOM Diff` 对比新旧Fiber树，生成dom mutation更新dom
+- `RSC Payload` React专属的数据结构，用来将服务端不能渲染的客户端组件文件，和服务端生成的参数props传递给Client
+
+![MPA](/static/images/SSR.png)
