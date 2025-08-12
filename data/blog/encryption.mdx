@@ -1,0 +1,115 @@
+---
+title: '如何加密生成的excel文件'
+date: 2024-11-1 12:18:00
+lastmod: '2024-11-01'
+tags: ['javascript']
+draft: false
+summary: '使用xlsx-populate加密生成的excel文件'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+# Node.js使用xlsx-populate实现Excel文件加密
+
+在现代应用开发中，保护敏感数据的安全性至关重要。当我们需要处理包含机密信息的Excel文件时，为文件添加密码保护是一个基本的安全措施。本文将介绍如何使用Node.js和xlsx-populate库来实现Excel文件的密码加密功能。
+
+## xlsx-populate库简介
+
+xlsx-populate是一个功能强大的Node.js库，专门用于操作Excel文件。与其他一些Excel处理库不同，xlsx-populate原生支持文件加密功能，可以为Excel文件设置密码保护，确保只有知道密码的用户才能打开和查看文件内容。
+
+### 主要特性
+
+- 支持读取和写入Excel文件
+- 原生支持密码加密和解密
+- 纯JavaScript实现，无需外部依赖
+- 跨平台兼容性好
+- API简洁易用
+
+## 安装依赖
+
+首先，我们需要安装xlsx-populate库：
+
+```bash
+npm install xlsx-populate
+```
+
+## 实现Excel文件加密
+
+下面是完整的实现代码：
+
+```javascript
+const XlsxPopulate = require('xlsx-populate');
+const fs = require("fs");
+const path = require("path");
+
+async function encryptExcelFile(inputPath, outputPath, password) {
+    try {
+        // 检查输入文件是否存在
+        if (!fs.existsSync(inputPath)) {
+            throw new Error("输入文件不存在");
+        }
+        
+        // 确保输出目录存在
+        const outputDir = path.dirname(outputPath);
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir, { recursive: true });
+        }
+        
+        // 使用xlsx-populate读取Excel文件
+        const workbook = await XlsxPopulate.fromFileAsync(inputPath);
+        
+        // 写入文件并设置密码保护
+        await workbook.toFileAsync(outputPath, { 
+            password: password 
+        });
+        
+        console.log("文件加密完成");
+        return true;
+    } catch (error) {
+        console.error("文件加密失败", error);
+        return false;
+    }
+}
+
+async function main() {
+    const inputPath = path.join(__dirname, "1.xlsx");
+    const outputPath = path.join(__dirname, "output", "加密文件.xlsx");
+    const password = "123456";
+
+    const success = await encryptExcelFile(inputPath, outputPath, password);
+    if (success) {
+        console.log("文件加密成功");
+    } else {
+        console.log("文件加密失败");
+    }
+}
+
+main();
+```
+
+## 代码详解
+
+### 核心函数说明
+
+**encryptExcelFile函数**是实现加密的核心，主要包含以下步骤：
+
+1. **文件检查**：验证输入文件是否存在，避免处理不存在的文件
+2. **目录创建**：确保输出目录存在，如果不存在则递归创建
+3. **文件读取**：使用`XlsxPopulate.fromFileAsync()`方法读取Excel文件
+4. **加密写入**：使用`toFileAsync()`方法将文件写入并设置密码
+
+### 关键API说明
+
+- `XlsxPopulate.fromFileAsync(filePath)`：异步读取Excel文件
+- `workbook.toFileAsync(outputPath, options)`：异步写入Excel文件，options中可设置password参数
+
+## 使用步骤
+
+1. **准备文件**：在项目根目录放置待加密的Excel文件，命名为`1.xlsx`
+
+2. **运行代码**：执行Node.js脚本
+   ```bash
+   node your-script.js
+   ```
+
+3. **验证结果**：检查`output`目录下的`加密文件.xlsx`，尝试打开时会提示输入密码
