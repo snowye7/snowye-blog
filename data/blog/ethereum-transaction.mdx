@@ -1,0 +1,48 @@
+---
+title: '以太坊交易的生命周期'
+date: 2026-02-09 20:00:00
+lastmod: '2026-02-09'
+tags: ['web3']
+draft: false
+summary: '以太坊交易从创建到最终上链的全过程'
+layout: PostSimple
+bibliography: references-data.bib
+---
+
+### 1. 构建原始交易对象 (Construct the Raw Transaction)
+首先，通过 Web3 库将函数调用转换为原始交易对象（Raw Transaction），该对象包含以下关键字段：
+* **nonce**: 账户发送的交易计数。用于确定交易顺序和防止重放攻击。
+* **gasPrice**: 你愿意为每单位 Gas 支付的价格（以 Gwei 为单位）。
+* **gasLimit**: 你愿意为该交易支付的最大 Gas 数量，防止死循环耗尽资金。
+* **to**: 目标地址（在合约调用中，即合约地址）。
+* **value**: 发送的以太币数量（调用函数时通常为 0）。
+* **data**: 包含函数签名的哈希和参数的编码数据，告诉合约执行哪个函数及使用什么参数。
+
+### 2. 签名交易 (Sign the Transaction)
+* 使用发送者的**私钥**对原始交易对象进行签名。
+* 这一步是为了向网络证明该交易确实由账户持有者发起。
+
+### 3. 本地验证 (Local Validation)
+* 签名后的交易提交给本地以太坊节点。
+* 本地节点验证签名的有效性，确保交易来源合法。
+
+### 4. 广播到网络 (Broadcast to the Network)
+* 本地节点将验证后的交易广播给对等节点（Peers），对等节点再继续扩散。
+* 生成**交易哈希 (Transaction ID)**，用户可通过该哈希在 Etherscan 等浏览器上追踪交易状态。
+
+### 5. 矿工节点接收 (Miner Node Accepts)
+* 矿工将交易放入**交易池 (Transaction Pool / Mempool)**。
+* 矿工通常根据 **Gas Price** 对交易进行排序，价格越高的交易越容易被优先打包进下一个区块。
+* 如果交易池已满且你的 Gas Price 过低，交易可能会被丢弃或无限期延迟。
+
+### 6. 矿工打包并广播区块 (Miner Finds Block & Broadcasts)
+* 矿工挑选交易打包进区块，并进行工作量证明（PoW）计算（注：文章写于 PoW 时期，现为 PoS，但打包逻辑类似）。
+* 一旦找到有效区块，矿工将其广播到全网。
+
+### 7. 节点同步 (Node Sync)
+* 你的本地节点最终接收到新区块，并同步本地的区块链副本。
+* 节点执行区块内的所有交易，更新状态。此时，交易被确认并在区块链上永久记录。
+
+[原文链接: Life Cycle of an Ethereum Transaction](https://medium.com/blockchannel/life-cycle-of-an-ethereum-transaction-e5c66bae0f6e)
+
+---
